@@ -1,0 +1,883 @@
+<title>Mastermind Retreat 2027</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: one long page, a thin sticky nav, a quiet hero with the big year like last year's invite,
+   then an options explorer (group by place or sort by price), dates, the plan, RSVP, pay, organizer corner. */
+:root {
+  --bg: #f2f4f3;
+  --card: #ffffff;
+  --card-2: #e9edeb;
+  --fg: #16231e;
+  --muted: #5c6b64;
+  --line: #d3dbd7;
+  --accent: #b55d1d;
+  --accent-ink: #ffffff;
+  --pine: #1f3a30;
+  --pine-ink: #e9f1ec;
+  --good: #2f7a4e;
+  --warn: #9a6a12;
+  --display: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --label: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1719; --card: #182225; --card-2: #1f2b2f; --fg: #e6ece8; --muted: #9baba3; --line: #2b383c; --accent: #e08d44; --accent-ink: #14100a; --pine: #0b1512; --pine-ink: #dfe9e3;
+    --good: #6cc08f; --warn: #e2b256; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1719; --card: #182225; --card-2: #1f2b2f; --fg: #e6ece8; --muted: #9baba3; --line: #2b383c;
+  --accent: #e08d44; --accent-ink: #14100a; --pine: #0b1512; --pine-ink: #dfe9e3; --good: #6cc08f; --warn: #e2b256; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5; margin: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--pine); }
+a { color: var(--accent); }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h2 { font-family: var(--display); font-weight: 600; font-size: clamp(1.8rem, 3.4vw, 2.4rem); line-height: 1.1; }
+h3 { font-family: var(--label); font-weight: 600; font-size: 1.15rem; letter-spacing: .02em; text-transform: uppercase; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; color: var(--muted); font-weight: 600; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+section { padding-block: 56px; }
+section + section { border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 28px; }
+.sec-head p { color: var(--muted); }
+
+/* nav */
+nav.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--pine); color: var(--pine-ink); }
+nav.top .wrap { display: flex; gap: 6px 18px; align-items: center; flex-wrap: wrap; padding-block: 10px; }
+nav.top .brand { font-family: var(--display); font-style: italic; font-size: 1.25rem; margin-right: auto; }
+nav.top a { color: var(--pine-ink); text-decoration: none; font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; padding: 4px 2px; border-bottom: 2px solid transparent; }
+nav.top a:hover, nav.top a:focus-visible { border-bottom-color: var(--accent); outline: none; }
+
+/* hero */
+.hero { background: linear-gradient(180deg, var(--pine) 0%, var(--pine) 70%, var(--bg) 100%); color: var(--pine-ink); padding-block: 48px 72px; }
+.hero .wrap { display: grid; gap: 18px; }
+.hero .year { font-family: var(--display); font-weight: 500; font-size: clamp(4.5rem, 16vw, 11rem); line-height: .9; letter-spacing: .06em; opacity: .28; }
+.hero h1 { font-family: var(--display); font-weight: 500; font-size: clamp(2.6rem, 7vw, 5rem); line-height: 1; margin-top: -1.1em; }
+.hero h1 em { font-style: italic; font-weight: 600; display: block; font-size: 1.15em; }
+.hero .sub { font-size: 1.1rem; max-width: 60ch; opacity: .92; }
+.status { display: inline-flex; gap: 10px; align-items: center; background: color-mix(in srgb, var(--pine-ink) 12%, transparent); border: 1px solid color-mix(in srgb, var(--pine-ink) 30%, transparent); padding: 8px 14px; border-radius: 999px; font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; width: fit-content; }
+.status .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+.hero .quick { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; font-size: .95rem; padding: 10px 16px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); text-decoration: none; cursor: pointer; }
+.btn.ghost { background: transparent; color: inherit; border-color: currentColor; }
+.btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+/* controls */
+.controls { display: flex; gap: 10px 18px; flex-wrap: wrap; align-items: center; margin-bottom: 22px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { background: var(--card); color: var(--fg); border: 0; padding: 8px 14px; font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: .9rem; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--pine); color: var(--pine-ink); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--card); color: var(--fg); border-radius: 999px; padding: 5px 12px; font-size: .85rem; cursor: pointer; font-family: var(--body); }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.note { color: var(--muted); font-size: .9rem; }
+
+/* option cards */
+.group { margin-bottom: 34px; }
+.group-title { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+.group-title .travel { color: var(--muted); font-size: .95rem; }
+.cards { display: grid; gap: 14px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; min-width: 0; }
+.card > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 6px 18px; padding: 18px 20px; align-items: start; }
+.card > summary::-webkit-details-marker { display: none; }
+.card > summary:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; border-radius: 10px; }
+.card .name { font-family: var(--display); font-weight: 600; font-size: 1.5rem; line-height: 1.1; }
+.card .place { color: var(--muted); font-size: .95rem; margin-top: 2px; }
+.card .price { text-align: right; font-family: var(--label); }
+.card .price .n { font-size: 1.7rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.card .price .l { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; }
+.card .tags { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: .75rem; padding: 3px 8px; border-radius: 4px; background: var(--card-2); color: var(--fg); }
+.tag.pick { background: var(--accent); color: var(--accent-ink); }
+.card .summary-text { grid-column: 1 / -1; color: var(--muted); }
+.card .open-hint { grid-column: 1 / -1; font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; color: var(--accent); }
+.card[open] .open-hint { display: none; }
+.card .body { border-top: 1px solid var(--line); padding: 20px; display: grid; gap: 24px; }
+.cols { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.cols > div { min-width: 0; }
+.plan-days { display: grid; gap: 12px; }
+.plan-day { display: grid; grid-template-columns: 110px 1fr; gap: 10px; }
+.plan-day .d { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; color: var(--muted); padding-top: 2px; }
+.plan-day ul { margin: 0; padding-left: 18px; }
+.plan-day li + li { margin-top: 4px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; color: var(--muted); font-weight: 600; }
+td.num, th.num { text-align: right; white-space: nowrap; }
+tr.total td { font-weight: 600; border-bottom: 0; }
+.tablewrap { overflow-x: auto; }
+.links { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.links li { display: grid; gap: 2px; }
+.links small { color: var(--muted); }
+.pm { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.pm ul { margin: 0; padding-left: 18px; }
+.pm h4 { margin: 0 0 6px; font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; color: var(--muted); }
+.caveat { background: var(--card-2); border-left: 3px solid var(--warn); padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: .92rem; }
+
+/* dates */
+.open-band { background: var(--card-2); border-radius: 8px; padding: 14px 16px; display: grid; gap: 4px; margin-top: 16px; }
+
+/* plan skeleton */
+.skeleton { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.day-card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 8px; align-content: start; }
+.day-card .t { font-family: var(--display); font-size: 1.4rem; font-weight: 600; }
+.day-card ul { margin: 0; padding-left: 18px; }
+.two { display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 28px; }
+.two ul { margin: 0; padding-left: 18px; }
+
+/* rsvp */
+.rsvp-grid { display: grid; gap: 24px; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+@media (max-width: 760px) { .rsvp-grid { grid-template-columns: 1fr; } .plan-day { grid-template-columns: 1fr; } }
+form.rsvp { display: grid; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px; }
+form.rsvp label { display: grid; gap: 5px; font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; color: var(--muted); font-weight: 600; }
+form.rsvp input, form.rsvp select, form.rsvp textarea { font: inherit; font-family: var(--body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 9px 10px; width: 100%; }
+form.rsvp textarea { min-height: 70px; resize: vertical; }
+form.rsvp input:focus-visible, form.rsvp select:focus-visible, form.rsvp textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.radio-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.radio-row label { display: inline-flex; gap: 6px; align-items: center; text-transform: none; letter-spacing: 0; font-family: var(--body); font-size: .95rem; color: var(--fg); font-weight: 400; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; background: var(--bg); }
+.radio-row label:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--bg)); }
+.radio-row input { width: auto; margin: 0; }
+.sent { background: var(--card-2); border-radius: 8px; padding: 14px 16px; display: grid; gap: 10px; }
+.sent pre { white-space: pre-wrap; font-family: var(--body); margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+.side { display: grid; gap: 18px; align-content: start; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 10px; min-width: 0; align-content: start; }
+.panel > * { min-width: 0; }
+.panel .big { font-family: var(--label); font-size: 2rem; font-weight: 700; line-height: 1; }
+.who { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.who li { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.who .st { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.who .st.yes { background: var(--good); } .who .st.maybe { background: var(--warn); }
+.who small { color: var(--muted); }
+.empty { color: var(--muted); font-style: italic; }
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--pine); color: var(--pine-ink); padding: 10px 16px; border-radius: 8px; font-family: var(--label); letter-spacing: .06em; text-transform: uppercase; font-size: .85rem; z-index: 20; }
+
+/* organizer */
+.org { background: var(--card-2); }
+.org-grid { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.qr { background: #fff; padding: 14px; border-radius: 8px; width: fit-content; max-width: 100%; }
+.qr img, .qr canvas { display: block; max-width: 100%; }
+code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .9em; background: var(--card); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+footer { padding-block: 28px 48px; color: var(--muted); font-size: .9rem; }
+
+/* The RSVP page: what the QR code opens. Only the invite header, the form, who's in and pay show. */
+body[data-view="rsvp"] header.hero, body[data-view="rsvp"] #options, body[data-view="rsvp"] #dates, body[data-view="rsvp"] #plan, body[data-view="rsvp"] #ask, body[data-view="rsvp"] #organizer, body[data-view="rsvp"] nav.top a.main-only { display: none; }
+body[data-view="rsvp"] section#rsvp { border-top: 0; padding-top: 0; }
+body[data-view="main"] .invite-head { display: none; }
+.invite-head { background: linear-gradient(180deg, var(--pine) 0%, var(--pine) 75%, var(--bg) 100%); color: var(--pine-ink); padding-block: 40px 64px; margin-bottom: 36px; margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px))); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.invite-head .in { max-width: 1080px; margin: 0 auto; display: grid; gap: 14px; }
+.invite-head .year { font-family: var(--display); font-size: clamp(4rem, 14vw, 9rem); line-height: .9; letter-spacing: .06em; opacity: .28; }
+.invite-head h2 { font-family: var(--display); font-weight: 500; font-size: clamp(2.2rem, 6vw, 4rem); margin-top: -1em; }
+.invite-head h2 em { font-style: italic; font-weight: 600; display: block; font-size: 1.15em; }
+.invite-head .when { font-family: var(--label); text-transform: uppercase; letter-spacing: .12em; font-size: 1rem; }
+.invite-head p { opacity: .92; }
+.invite-head a { color: var(--pine-ink); }
+.etransfer { display: grid; gap: 6px; background: var(--card-2); border-radius: 8px; padding: 12px 14px; }
+.etransfer code { font-size: 1rem; background: var(--card); }
+.remind { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.remind li { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding: 6px 0; }
+.remind .sm { font-size: .85rem; padding: 6px 10px; }
+.ask-panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 24px; display: grid; gap: 14px; max-width: 720px; }
+.ask-panel ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.ask-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 16px; }
+.btn.sm { font-size: .85rem; padding: 7px 12px; }
+
+/* organizer forms, tracker, log, archive */
+.org-wide { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.panel.span2 { grid-column: span 2; }
+@media (max-width: 700px) { .panel.span2 { grid-column: span 1; } }
+form.cfg { display: grid; gap: 12px; }
+form.cfg label { display: grid; gap: 4px; font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; color: var(--muted); font-weight: 600; min-width: 0; }
+form.cfg input, form.cfg select, form.cfg textarea { font: inherit; font-family: var(--body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; width: 100%; }
+form.cfg textarea { min-height: 60px; resize: vertical; }
+form.cfg input:focus-visible, form.cfg select:focus-visible, form.cfg textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.cfg-row { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.cfg-opts { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px 12px; margin: 0; }
+.chk-grid { display: grid; gap: 6px 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 6px; }
+.chk-grid label { display: flex; gap: 8px; align-items: center; text-transform: none; letter-spacing: 0; font-family: var(--body); font-size: .95rem; color: var(--fg); font-weight: 400; cursor: pointer; }
+.chk-grid input { width: auto; margin: 0; }
+.todo { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.todo li { display: flex; gap: 10px; align-items: flex-start; }
+.todo .box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--line); flex: none; margin-top: 2px; display: grid; place-items: center; cursor: pointer; background: var(--bg); }
+.todo .box.done { background: var(--good); border-color: var(--good); color: #fff; font-size: .8rem; }
+.todo .auto .box { cursor: default; }
+.todo .done-text { color: var(--muted); text-decoration: line-through; }
+table.tracker td.c, table.tracker th.c { text-align: center; }
+.flip { width: 26px; height: 26px; border-radius: 6px; border: 2px solid var(--line); background: var(--bg); cursor: pointer; display: inline-grid; place-items: center; font-size: .85rem; color: transparent; }
+.flip.on { background: var(--good); border-color: var(--good); color: #fff; }
+.flip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.log { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.log li { display: grid; gap: 4px; border-left: 3px solid var(--line); padding: 4px 0 4px 12px; }
+.log .lh { display: flex; gap: 10px; flex-wrap: wrap; font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; color: var(--muted); }
+.log .ln { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .92rem; }
+.log .ln.done span { color: var(--muted); text-decoration: line-through; }
+details.archive { border: 1px dashed var(--line); border-radius: 10px; padding: 0 18px; margin-top: 10px; }
+details.archive > summary { cursor: pointer; padding: 14px 0; font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; color: var(--muted); }
+details.archive[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.flights-line { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; }
+
+/* walkthrough */
+.tour-spot { position: fixed; z-index: 30; border-radius: 10px; box-shadow: 0 0 0 9999px rgba(8, 14, 12, .62), 0 0 0 2px var(--accent); pointer-events: none; transition: top .25s, left .25s, width .25s, height .25s; }
+.tour-tip { position: fixed; z-index: 31; background: var(--card); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 8px; box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+.tour-tip h3 { font-size: 1.05rem; }
+.tour-tip p { font-size: .95rem; }
+.tour-n { font-family: var(--label); text-transform: uppercase; letter-spacing: .1em; font-size: .75rem; color: var(--muted); }
+.tour-btns { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+@media (prefers-reduced-motion: reduce) { .tour-spot { transition: none; } }
+@media (prefers-reduced-motion: no-preference) { .card { transition: border-color .15s; } .card:hover { border-color: var(--accent); } }
+.ask-box{margin-top:10px;display:grid;gap:8px}.ask-box textarea{width:100%;min-height:70px;font:inherit;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit}.ask-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+</style>
+
+<nav class="top"><div class="wrap">
+  <span class="brand">Mastermind Retreat</span>
+  <a class="main-only" href="#options">Options</a><a class="main-only" href="#dates">Dates</a><a class="main-only" href="#plan">The plan</a><a href="#rsvp">RSVP</a><a href="#pay">Pay</a><a class="main-only" href="#ask">Ask Kess</a><a class="main-only" href="#tour" id="tourLink">Show me around</a><a class="rsvp-only" id="fullPlanLink" href="#options" hidden>Full plan</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="year" aria-hidden="true">2027</div>
+  <h1>Century 21 Masters <em>Mastermind Retreat</em></h1>
+  <p class="sub" id="heroSub">Three days away from the office with the people who show up every week. Ten to twelve of us, two nights, one working morning, and the rest is hot tubs, dinner and whatever game Ryan has cooked up.</p>
+  <span class="status" id="statusPill"><span class="dot"></span><span id="statusText">Planning. Dates and place to be picked.</span></span>
+  <div class="quick">
+    <a class="btn" href="#options">See the options</a>
+    <a class="btn ghost" href="#rsvp">RSVP</a>
+  </div>
+</div></header>
+
+<section id="options"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Where we could go</span>
+    <h2>Eight ways to do it, by place and by price</h2>
+    <p>Every price is an estimate per person, all in: room for two nights, the working morning with meals, the big dinner, and the travel to get there. Open a card for the day-by-day plan, the cost breakdown and links to the hotels and tours. Nothing is booked.</p>
+  </div>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Arrange options">
+      <button id="byPlace" aria-pressed="true">By place</button>
+      <button id="byPrice" aria-pressed="false">By price</button>
+    </div>
+    <div class="chips" id="chips" aria-label="Filter options"></div>
+    <span class="note" id="countNote"></span>
+  </div>
+  <div id="optionsRoot"></div>
+</div></section>
+
+<section id="dates"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">When</span>
+    <h2>Five windows that work</h2>
+    <p>Midweek, Wednesday to Friday, like last year. Flight prices are per person return from Edmonton to Kelowna, taxes in, as Google Flights showed them on November 8, 2026. They only matter for the Okanagan options, but they show which weeks are cheap.</p>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Window</th><th class="num">Cheapest flight</th><th class="num">Best nonstop</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Jan 20 to 22</td><td class="num">$186</td><td class="num">$233 WestJet 9:00 am</td><td>Ten weeks of lead time.</td></tr>
+      <tr><td><strong>Jan 27 to 29</strong></td><td class="num">$181</td><td class="num">$242 WestJet 9:00 am</td><td>Same lead time as last year.</td></tr>
+      <tr><td><strong>Feb 3 to 5</strong></td><td class="num">$169</td><td class="num">$193 WestJet 9:00 am</td><td>Cheapest flights of the five.</td></tr>
+      <tr><td>Mar 17 to 19</td><td class="num">$226</td><td class="num">$233 Flair 2:10 pm (WestJet $385)</td><td>Spring market starting. Mar 15 to 17 showed $173.</td></tr>
+      <tr><td>Mar 24 to 26</td><td class="num">$203</td><td class="num">$203 Flair 2:10 pm (WestJet $385)</td><td>Latest sensible week.</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<section id="plan"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">The shape of it</span>
+    <h2>Arrive and play. One working morning. Then nothing.</h2>
+    <p>This is the skeleton every option follows. The cards above change the where; this is the what. It is last year's shape with the two things people asked for added: a hot seat for everyone and more of the afternoon free.</p>
+  </div>
+  <div class="skeleton">
+    <div class="day-card"><span class="eyebrow">Day one, Wednesday</span><span class="t">Arrive and settle</span>
+      <ul><li>Roll in from 2 pm. Welcome bag in your room.</li><li>Free afternoon. Optional walk, spa or nap.</li><li>7:30 pm fire pit or lounge. Drinks on the group.</li><li>The photo game starts the moment you arrive.</li></ul></div>
+    <div class="day-card"><span class="eyebrow">Day two, Thursday</span><span class="t">The working morning</span>
+      <ul><li>8:30 breakfast together.</li><li>9:00 first block. 9:45 second block. Topics are open; suggest one.</li><li>10:30 coffee.</li><li>10:45 hot seats: seven minutes each, one problem, the room solves it.</li><li>12:00 lunch.</li><li>1:00 "Steal this": everyone shows one thing that worked in 2026 in four minutes.</li><li>2:00 done. Hot tub, spa, ski, nothing.</li><li>6:30 the big dinner. Photo game awards at dessert.</li></ul></div>
+    <div class="day-card"><span class="eyebrow">Day three, Friday</span><span class="t">Go home, or don't</span>
+      <ul><li>Breakfast on your own.</li><li>Check out by 11. Stay on for the spa if you like.</li><li>Flyers: afternoon flight home.</li></ul></div>
+  </div>
+  <div class="two">
+    <div><h3>What to bring</h3><ul>
+      <li>One problem you want the room to solve in seven minutes.</li><li>One thing that worked in 2026: a script, a tool, a habit. You get four minutes to show it.</li><li>Swimsuit. There is always a hot tub.</li><li>Your phone, charged. The photo game needs it.</li><li>Something warm for the fire. Boots if we are in the mountains.</li><li>A number you are chasing in 2027. We write them down and read them back next year.</li></ul></div>
+    <div><h3>How the money works</h3><ul>
+      <li>Last year everyone paid Geneva one invoice of about $400 for the working morning, meals and the dinner, and booked their own room with a group code. Same plan this year.</li><li>The brokerage card holds the hotel contract. Ryan is the on-site contact.</li><li>If we fly, everyone books the same flights. The site will list the flight numbers once dates are set.</li><li>Drinks at dinner are on you. Drinks at the fire are on the group.</li></ul></div>
+  </div>
+</div></section>
+
+<section id="rsvp"><div class="wrap">
+  <div class="invite-head"><div class="in">
+    <div class="year" aria-hidden="true">2027</div>
+    <h2>You're invited. <em>Mastermind Retreat</em></h2>
+    <div class="when" id="inviteWhen">Dates and place coming soon</div>
+    <p id="inviteLine">Two nights away with the people who show up every week. One working morning, one big dinner, a hot tub, and a game. Say you're in below, then pay your share.</p>
+    <p><a href="#options">See every option and the full plan</a></p>
+  </div></div>
+  <div class="sec-head">
+    <span class="eyebrow">Count me in</span>
+    <h2>RSVP</h2>
+    <p id="rsvpIntro">Tell Ryan and Geneva whether you are in, how you want to sleep, and whether a short flight is fine. You can change your answer later.</p>
+  </div>
+  <div class="rsvp-grid">
+    <form class="rsvp" id="rsvpForm" novalidate>
+      <label for="rName">Your name
+        <select id="rName" name="name" required>
+          <option value="">Pick your name</option>
+        </select>
+      </label>
+      <label for="rNameOther" id="rNameOtherWrap" hidden>Name
+        <input id="rNameOther" name="nameOther" type="text" autocomplete="name" placeholder="First and last">
+      </label>
+      <div>
+        <span class="eyebrow" style="display:block;margin-bottom:6px">Are you in?</span>
+        <div class="radio-row">
+          <label><input type="radio" name="attending" value="yes" id="aYes"> Yes, I'm in</label>
+          <label><input type="radio" name="attending" value="maybe" id="aMaybe"> Probably, ask me again</label>
+          <label><input type="radio" name="attending" value="no" id="aNo"> Can't this year</label>
+        </div>
+      </div>
+      <div>
+        <span class="eyebrow" style="display:block;margin-bottom:6px">Room</span>
+        <div class="radio-row">
+          <label><input type="radio" name="room" value="own" id="rOwn"> My own room</label>
+          <label><input type="radio" name="room" value="share" id="rShare"> Sharing with someone</label>
+          <label><input type="radio" name="room" value="elsewhere" id="rElse"> Staying elsewhere</label>
+        </div>
+      </div>
+      <div>
+        <span class="eyebrow" style="display:block;margin-bottom:6px">Travel</span>
+        <div class="radio-row">
+          <label><input type="radio" name="travel" value="fly" id="tFly"> A short flight is fine</label>
+          <label><input type="radio" name="travel" value="drive" id="tDrive"> I'd rather drive</label>
+          <label><input type="radio" name="travel" value="either" id="tEither"> Either</label>
+        </div>
+      </div>
+      <label for="rDiet">Food you don't eat
+        <input id="rDiet" name="diet" type="text" placeholder="Allergies, vegetarian, none">
+      </label>
+      <label for="rNote">Anything else
+        <textarea id="rNote" name="note" placeholder="Sharing with who, arriving late, a date that doesn't work"></textarea>
+      </label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button class="btn" type="submit" id="rsvpSubmit">Send my RSVP</button>
+        <span class="note" id="rsvpMode"></span>
+      </div>
+      <div class="sent" id="rsvpSent" hidden></div>
+    </form>
+    <div class="side">
+      <div class="panel" id="pay">
+        <h3>Pay your share</h3>
+        <span class="big" id="payAmount">Amount to come</span>
+        <p id="payText">The per-person amount is set once the place is picked. Last year it was $400.57, tax and tip in, for the working morning, meals and the dinner. Rooms and flights are booked and paid by each person.</p>
+        <a class="btn" id="payLink" href="#" hidden target="_blank" rel="noopener">Pay your share</a>
+        <div class="etransfer" id="etransfer" hidden>
+          <span class="eyebrow">Or e-transfer</span>
+          <code id="etransferEmail"></code>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn ghost sm" type="button" id="copyEtransfer" style="font-size:.85rem;padding:6px 10px">Copy the address</button><span class="note" id="etransferNote"></span></div>
+        </div>
+        <span class="note" id="payNote">Geneva will send the invoice once the plan is final. The pay button appears here when the link is ready.</span>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+
+<section id="ask"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Changes and questions</span>
+    <h2>Ask Kess</h2>
+    <p>This is a brainstorming board. Nothing is decided. Add, change or suggest anything. "Price Radium for the same dates", "Move the dinner to Thursday" or "Add a snowmobile afternoon" all work.</p>
+  </div>
+  <div class="ask-panel" id="askPanel">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button class="btn" type="button" id="askBtn">Ask Kess</button>
+      <span class="note" id="askNote"></span>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">Built for the Century 21 Masters mastermind group. Prices are estimates from public rates on November 8, 2026 and last year's bills; nothing on this page is booked or quoted until it says so.</div></footer>
+
+<script>
+// ---------- Settings Ryan and Geneva change once the plan is set ----------
+const CONFIG = {
+  status: "planning",            // "planning" or "confirmed"
+  confirmedText: "",             // e.g. "Jan 27 to 29, 2027 at the Delta Grand, Kelowna"
+  payLink: "",                   // the invoice or payment link, when Geneva has it
+  payAmount: "",                 // e.g. "$425 per person"
+  etransferEmail: "",            // e.g. an Interac e-transfer address, if that is how people pay
+  etransferNote: "",             // e.g. "Put your name and 'retreat' in the message"
+  rsvpBy: "",                    // e.g. "December 11"
+  organizerPhone: "780-982-2600",
+  organizerEmail: "ryanmcdonald.home@gmail.com",
+  pageUrl: "https://claude.ai/artifact/CiFUfx8PPqJUcjpJuY4upw",   // the share link; the QR code points here
+};
+// Firm, by Kessway: the retreat is an event in the Century 21 Masters practice office. One invoice per person, public link, becomes the receipt once marked paid.
+const FIRM = {
+  eventUrl: "https://firm.kessway.com/events/8880a252-f08a-47c8-878f-c64578dcb230",
+  invoices: {
+    "alyssa-kasko": [1, "https://kess.kessway.com/firm/invoice/13e27947c5122377f22e2129c2b67920"],
+    "april-sturko": [2, "https://kess.kessway.com/firm/invoice/927fb8b82c619133672e895c7509165c"],
+    "geneva-tetreault": [3, "https://kess.kessway.com/firm/invoice/62247a04712dc67b9c409f604739afa6"],
+    "jodi-netelenbos": [4, "https://kess.kessway.com/firm/invoice/7ec1de4430e975ede96a40c3572b4b9a"],
+    "jody-lambertus": [5, "https://kess.kessway.com/firm/invoice/6f0bc82625ff2570e6ad057aac11cf7b"],
+    "jordan-daoust": [6, "https://kess.kessway.com/firm/invoice/91c896d3f0708f5a2c3e973c156518e2"],
+    "melissa-hunter": [7, "https://kess.kessway.com/firm/invoice/fb9dce89105cf979bf18bb1dc6ca1265"],
+    "melissa-saretsky": [8, "https://kess.kessway.com/firm/invoice/cac9060a2b6e4be55a461e46c84a7c11"],
+    "ryan-mcdonald": [9, "https://kess.kessway.com/firm/invoice/947427230840a52d7856ce90cecb029c"],
+    "sheldon-casavant": [10, "https://kess.kessway.com/firm/invoice/5ce04537c0016f82211206616821ef26"],
+    "stephanie-mclean": [11, "https://kess.kessway.com/firm/invoice/86c33eeb5046b85f0c7f288094bb0244"],
+  },
+};
+let cfg = Object.assign({ chosen: [], window: "", flights: "", hotelContact: "", notes: "", todo: {} }, CONFIG);
+Object.assign(cfg, {"status": "planning", "window": "", "chosen": [], "payLink": "", "payAmount": "", "rsvpBy": "", "etransferEmail": "", "etransferNote": "", "flights": "", "hotelContact": ""});
+function isChosen(id){ return Array.isArray(cfg.chosen) && cfg.chosen.includes(id); }
+const PEOPLE = ["Alyssa Kasko","April Sturko","Geneva Tetreault","Jodi Netelenbos","Jody Lambertus","Jordan Daoust","Melissa Hunter","Melissa Saretsky","Ryan McDonald","Sheldon Casavant","Stephanie McLean"];
+
+// ---------- The options ----------
+const OPTIONS = [
+{ id:"canmore", name:"Canmore, different building", region:"Canmore and Kananaskis", regionOrder:1, travel:"4 h drive", mode:"drive", low:850, high:1000,
+  tags:["Hot tub","Fire pit","Known quantity"], pick:false,
+  summary:"The Malcolm worked. Keep the town, change the hotel so it feels new: Grande Rockies with the pool and water slide, Chateau Canmore, or a Spring Creek rental for the whole group.",
+  plan:[["Wednesday",["Drive down in car pools, arrive 2 to 4 pm, welcome bags at the desk.","Free afternoon: Main Street, the Grassi Lakes walk if the trail is open, or the hot tub.","7:30 fire pit. S'mores and hot chocolate were $90 for 90 minutes last year and worth it."]],
+        ["Thursday",["8:30 breakfast in the meeting room. Sessions 9 to 2 with coffee and lunch, same package as last year ($140 a head).","2 pm hot tub and pool. Optional snowshoe with White Mountain Adventures for anyone who wants to move.","6:30 group dinner. The Malcolm's Stirling, or Sauvage or the Sensory for a change. Ask the Malcolm whether a 2027 Winemakers' Dinner is on the calendar."]],
+        ["Friday",["Check out by 11. Spa at the Malcolm or the Nordic spa in Kananaskis on the way home for anyone staying on."]]],
+  costs:[["Room, 2 nights at $200 to $280",450,"group rate midweek in January, estimate"],["Working morning package",140,"last year's actual, per person"],["Group dinner",145,"last year's Winemakers' Dinner ticket"],["Fire pit, bags, drinks on the group",80,"split"],["Gas, split by car",40,""]],
+  links:[["The Malcolm Hotel","https://www.malcolmhotel.ca/","last year's hotel, group code 2601HOME"],["Grande Rockies Resort","https://www.granderockies.com/","pool, water slide, suites with kitchens"],["Chateau Canmore","https://www.google.com/search?q=Chateau+Canmore","the Malcolm's sister property"],["White Mountain Adventures","https://www.whitemountainadventures.com/","guided snowshoe, the hotel's own suggestion"],["Discover Banff Tours","https://www.banfftours.com/","half-day tours from Canmore"]],
+  pros:["Easiest to pull off in eleven weeks. One call gets a proposal in a day.","Everyone knows the drive.","Cheapest hotel option that still has a proper meeting room."],
+  cons:["Same town two years running.","Four hours each way eats most of a day."],
+  caveat:"Room rate is an estimate; the 2026 group rate was in a PDF proposal, not in the emails."},
+
+{ id:"kananaskis", name:"Kananaskis Mountain Lodge", region:"Canmore and Kananaskis", regionOrder:1, travel:"3 h 45 drive", mode:"drive", low:1300, high:1600,
+  tags:["Nordic spa","Cold plunge","Hot tub","Everything on site"], pick:false,
+  summary:"One resort that does everything, with the Kananaskis Nordic Spa on the property: hot pools, saunas and the cold plunge Ryan wanted last year. Closer to Edmonton than Canmore.",
+  plan:[["Wednesday",["Arrive 2 to 4 pm. Welcome bags to the rooms.","Free afternoon. The spa takes bookings from 10 am; a sunset session is the move.","7:30 drinks by the fireplace in the lobby or the outdoor fire bowls. The lodge has a pool and hot tub too."]],
+        ["Thursday",["8:30 breakfast, sessions 9 to 2 in a boardroom with the lodge's meeting package.","2 pm Nordic spa for everyone: hot, cold, rest, repeat, then the cedar sauna.","6:30 dinner at Cedar in the lodge, or Forte for Italian. A private table for twelve is easy here."]],
+        ["Friday",["Check out by 11. Ribbon Creek walk or one more spa round for anyone staying."]]],
+  costs:[["Room, 2 nights at about $400 plus $35 resort fee and 3% fee",900,"published winter rates, about a year old"],["Working morning package",150,"estimate, ask group sales"],["Nordic spa pass",140,"day pass; sometimes included in group deals"],["Group dinner",140,"estimate"],["Drinks on the group, bags",80,""],["Gas, split by car",40,""]],
+  links:[["Pomeroy Kananaskis Mountain Lodge","https://lodgeatkananaskis.com/","the lodge itself, now run by Pomeroy"],["Kananaskis Nordic Spa","https://www.knordicspa.com/","on the lodge grounds"],["Meetings at the lodge","https://www.google.com/search?q=Pomeroy+Kananaskis+Mountain+Lodge+meetings+groups","group sales page"]],
+  pros:["The spa is the activity. Nobody has to plan anything after the sessions.","Nobody drives after dinner.","Closest mountain resort to Edmonton after Jasper."],
+  cons:["Priciest of the drive options.","A food-and-beverage minimum like the Malcolm's, probably higher."],
+  caveat:"Rates come from a press release and booking listings about a year old. Get the 2027 group rate in writing."},
+
+{ id:"jasper", name:"Fairmont Jasper Park Lodge cabins", region:"Jasper", regionOrder:2, travel:"3 h 45 drive", mode:"drive", low:1000, high:1300,
+  tags:["Cabins","Skating","Fireplace"], pick:false,
+  summary:"Two Signature Cabins on Lac Beauvert, three kings and a fireplace in each, so the whole group lives under two roofs. Skating from the door. Jasper is still rebuilding after the 2024 fire and the money is welcome.",
+  plan:[["Wednesday",["Drive the Yellowhead, arrive 2 to 4 pm. Cabin keys and welcome bags at the main lodge.","Free afternoon: skate on the lake rink, walk the lakeshore loop, or sit by the cabin fire.","7:30 the two cabins gather in one: fire, drinks, s'mores from the lodge."]],
+        ["Thursday",["8:30 breakfast in the cabin, catered by the lodge or cooked by whoever volunteers.","9 to 2 sessions in the bigger cabin's living room. No meeting room to rent.","2 pm free: the pool and hot tub at the lodge, snowshoes from the activity desk, Maligne Canyon icewalk for the brave (book ahead).","6:30 dinner at Orso Trattoria in the lodge, private table."]],
+        ["Friday",["Check out by 11. Jasper town for lunch on the way out."]]],
+  costs:[["Cabin share, 2 nights",760,"Signature Cabin split six ways, plus $65 a night resort fee, estimate"],["Breakfast and lunch, two days, catered or cooked",150,""],["Group dinner",150,"estimate"],["Icewalk or snowshoe, optional",80,""],["Drinks on the group, bags",80,""],["Gas, split by car",40,""]],
+  links:[["Fairmont Jasper Park Lodge","https://www.fairmont.com/en/hotels/jasper/fairmont-jasper-park-lodge.html","the lodge"],["Cabins",  "https://www.jasper-park-lodge.com/stay/rooms-suites/","Signature Cabins, 3 kings, sleeps 6"],["Groups and retreats","https://www.jasper-park-lodge.com/gather/","group sales"],["Alberta residents rate","https://www.fairmont.com/en/hotels/jasper/fairmont-jasper-park-lodge/offers/alberta-bc-residents-rate.html","shows the $65 a night resort fee"]],
+  pros:["A real lodge feel, fireplace and all.","Living-room sessions mean no meeting package and no minimum spend.","Different mountains from last year."],
+  cons:["Fewer restaurants open in winter.","The resort fee adds $130 a person before anything else.","Two cabins means the group splits at night."],
+  caveat:"Cabin rates are not published for January 2027. The estimate uses third-party listings from about $350 a night for a room; cabins run higher but split six ways."},
+
+{ id:"kelowna", name:"Downtown Kelowna and the wineries", region:"Okanagan, by air", regionOrder:3, travel:"1 h 30 flight", mode:"fly", low:1050, high:1300,
+  tags:["Wine","Cold plunge","Hot tub","City"], pick:true,
+  summary:"Fly in on the 9 am WestJet, stay on the water downtown, spend Thursday afternoon on a private wine tour and Thursday night at a winery table. The sauna on the lake has the cold plunge.",
+  plan:[["Wednesday",["9:00 am WestJet out of Edmonton, on the ground in Kelowna at 9:30. Two rental minivans or a charter van to downtown.","Drop bags at the Delta Grand or the Royal Kelowna. Lunch on Bernard Avenue.","Free afternoon: free skating at Stuart Park across the street, or a private session at the Löyly floating sauna with the cold plunge.","7:30 drinks on the group at the hotel lounge, or a fire table on the waterfront patio."]],
+        ["Thursday",["8:30 breakfast, sessions 9 to 2 in a Delta meeting room (or the Royal's big suite if we go that way).","2:30 the wine tour van picks up at the hotel: three wineries on the Westside, tastings included, back by 6.","6:30 dinner at Home Block at CedarCreek or Old Vines at Quails' Gate, private table. Photo game awards at dessert."]],
+        ["Friday",["Breakfast on your own. Check out by 11.","Afternoon WestJet home, or stay on for the weekend; it is Kelowna."]]],
+  costs:[["Flight, return",215,"$193 to $242 on the dates checked"],["Room, 2 nights at $205 to $233",440,"Delta Grand or Royal Kelowna, mid-November snapshot, same low season"],["Working morning package",140,"estimate, same as the Malcolm's"],["Winery dinner",140,"estimate before drinks"],["Private wine tour",180,"$105 to $260 depending on operator"],["Vans, parking, bags",70,""]],
+  links:[["Delta Hotels Grand Okanagan Resort","https://www.marriott.com/en-us/hotels/ylwdr-delta-hotels-grand-okanagan-resort/overview/","waterfront, meeting rooms, pools and hot tub, about $209 to $233"],["The Royal Kelowna","https://www.google.com/search?q=The+Royal+Kelowna+by+Bellstar","rooftop infinity pool and hot tubs, suites with kitchens, about $204"],["Manteo at Eldorado Resort","https://www.hoteleldoradokelowna.com/","waterfront with meeting rooms, about $211; mixed reviews"],["Hotel Zed","https://www.google.com/search?q=Hotel+Zed+Kelowna","the fun cheap one, about $80 to $101, hot tub"],["Sip and Anchor private wine tour","https://sipandanchor.com/wine-beer-tours/","6 hours door to door, $259 a person for 7 or more"],["Kelowna Wine Tours private group","https://kelownawinetours.com/group-wine-tours-kelowna","$1,250 for the group van; confirm it seats 12"],["Home Block at CedarCreek","https://www.cedarcreek.bc.ca/","winery restaurant, open in winter"],["Old Vines at Quails' Gate","https://www.quailsgate.com/","winery restaurant, open in winter"],["Löyly floating sauna","https://www.google.com/search?q=Loyly+floating+sauna+Kelowna","sauna on the lake with a cold plunge, private sessions"],["Winter in Kelowna","https://www.tourismkelowna.com/explore/seasons/winter/","skating, snowshoeing, what is open"],["Flights, Edmonton to Kelowna","https://www.google.com/travel/flights?q=Flights%20from%20YEG%20to%20YLW%20on%202027-01-27%20through%202027-01-29","Google Flights for Jan 27 to 29; change the dates there"],["Airport vans","https://www.ridebooker.com/transfers/ylw/kelowna","charter van quotes"]],
+  pros:["The wine theme the group already liked, done properly.","A real city for the free afternoon.","Nobody drives four hours. The cold plunge exists."],
+  cons:["Airport time both ways cuts into the arrive-and-play day; the 9 am flight fixes most of it.","Twelve people booking the same flight is one more thing to herd."],
+  caveat:"Hotel prices are a mid-November midweek snapshot because Google Hotels would not hold January dates; it is the same low season. No winery has posted a 2027 winemaker's dinner yet; ask Home Block about a private winemaker's table."},
+
+{ id:"sparkling", name:"Sparkling Hill Resort, Vernon", region:"Okanagan, by air", regionOrder:3, travel:"1 h 30 flight + 40 min", mode:"fly", low:1250, high:1450,
+  tags:["Spa included","Cold plunge","Adults only"], pick:false,
+  summary:"Adults-only resort above Okanagan Lake with the KurSpa included in every stay: seven pools, steam rooms, a dozen saunas, a cold plunge and an outdoor infinity pool. A spa retreat first, a mastermind second.",
+  plan:[["Wednesday",["9:00 am WestJet to Kelowna, charter van 40 minutes north to Vernon.","Check in, lunch at PeakFine, then the spa. All of it.","7:30 drinks in the lounge with the lake view. Fire pits outside."]],
+        ["Thursday",["8:30 breakfast (included), sessions 9 to 2 in the Cleanse Studio, half-day rate $450 for the room.","2 pm spa again. Cold plunge challenge with a judge.","6:30 dinner at PeakFine, private table. Or a van to a Vernon winery if the group wants wine."]],
+        ["Friday",["Breakfast, one more sauna, check out by 11. Van to the airport for the afternoon flight."]]],
+  costs:[["Flight, return",215,""],["Room, 2 nights at $300 to $350",650,"the resort's own winter offers; spa included"],["Meeting room share and catering",140,"$450 half day split, plus lunch"],["Dinner at PeakFine",130,"estimate"],["Charter van, return",110,"14-seat van quoted $652 each way, split"],["Drinks on the group, bags",70,""]],
+  links:[["Sparkling Hill Resort","https://www.sparklinghill.com/","the resort"],["Corporate spaces and rates","https://www.sparklinghill.com/corporate/spaces/","Cleanse Studio $450 half day, $800 full"],["Current offers","https://www.sparklinghill.com/offers/","winter offers from $299 Sunday to Thursday; packages exclude groups of 3 rooms or more"],["Airport to Vernon van","https://www.ridebooker.com/transfers/ylw/vernon/shuttle","charter van quotes"]],
+  pros:["Everyone in one building and nothing to organize once you arrive.","Best spa within a short flight of Edmonton.","The cold plunge is built in."],
+  cons:["Isolated: no wineries or town within walking distance.","Highest room rate of the Okanagan options.","Package offers exclude groups, so it is a group-sales conversation."],
+  caveat:"Google showed only a holiday-week rate ($999 on Dec 27) which is not representative. The $300 to $350 estimate comes from the resort's own Sunday-to-Thursday offers."},
+
+{ id:"bigwhite", name:"Big White chalet", region:"Okanagan, by air", regionOrder:3, travel:"1 h 30 flight + 1 h", mode:"fly", low:900, high:1200,
+  tags:["Hot tub","Ski optional","One house"], pick:false,
+  summary:"One ski-in chalet that sleeps 12 to 14 with a private hot tub on the deck, an hour above Kelowna. Sessions in the living room, dinner cooked in or at the village, snow guaranteed.",
+  plan:[["Wednesday",["9:00 am WestJet to Kelowna, shuttle an hour up to Big White. Groceries on the way.","Settle into the chalet. Ski, tube, or sit in the hot tub watching other people ski.","7:30 hot tub and the fire. Someone cooks, or the village delivers."]],
+        ["Thursday",["8:30 breakfast in the chalet, sessions 9 to 2 around the big table.","2 pm free: ski if you ski, snowshoe or the village hot tubs if you don't.","6:30 private chef dinner in the chalet, or the Blackforest or the Globe in the village."]],
+        ["Friday",["Pack up, shuttle down to Kelowna, afternoon flight home."]]],
+  costs:[["Flight, return",215,""],["Chalet share, 2 nights",375,"4-bedroom ski-in chalets with hot tubs, $1,500 to $3,000 a night in January, estimate"],["Groceries, breakfasts, lunches",100,""],["Chef dinner or village dinner",150,""],["Shuttle, airport to hill and back",120,""],["Lift ticket, optional",0,"about $150 a day if you ski; not in the total"]],
+  links:[["Big White group lodging","https://www.bigwhite.com/plan-your-trip/groups/group-accommodation","the resort's own group page"],["Chalets on Airbnb","https://www.airbnb.com/big-white-ski-resort-kelowna-canada/stays/chalets","sleeps 12 to 14 with hot tubs"],["Alluradirect rentals","https://www.alluradirect.com/bigwhite/","Blackrock and Snow Pine chalets"],["Inn at Big White","https://www.bigwhite.com/plan-your-trip/accommodation/inn-big-white","100 units if people want their own rooms"]],
+  pros:["Cheapest of the Okanagan trips.","Most time together. Hot tub on the deck.","Snow is a sure thing in January."],
+  cons:["Shared house, shared bathrooms. No front desk for welcome bags.","The mountain is the point; a wine dinner means a van down to Kelowna.","No dated chalet prices online yet."],
+  caveat:"Chalet rate is an estimate from comparable listings. Owners quote by date; ask two or three."},
+
+{ id:"chalet", name:"One big chalet with a chef, Canmore or Golden", region:"Canmore and Kananaskis", regionOrder:1, travel:"4 to 5 h drive", mode:"drive", low:600, high:800,
+  tags:["Hot tub","Private chef","Cheapest"], pick:false,
+  summary:"Rent one six- or seven-bedroom chalet with a hot tub for everyone, bring in a private chef for the big dinner, cook breakfast together, run the sessions in the living room. Half the price of a hotel.",
+  plan:[["Wednesday",["Car pools, arrive 3 to 4 pm. Pick rooms, pick bunk-mates. Bags on the beds.","Free afternoon. Hot tub, a walk, the town for anyone who wants it.","7:30 fire outside, drinks inside. Someone brings the s'mores kit."]],
+        ["Thursday",["8:30 breakfast, two people on eggs. Sessions 9 to 2 around the dining table, coffee always on.","2 pm free. Hot tub rotation, naps, a snowshoe loop.","6:30 the chef arrives. Four courses at the long table. Awards at dessert."]],
+        ["Friday",["Strip the beds, out by 10. Breakfast in town on the way home."]]],
+  costs:[["Chalet share, 2 nights",350,"$1,500 to $2,500 a night split 10 to 12 ways"],["Private chef dinner",150,"$120 to $180 a person, estimate"],["Groceries and drinks",100,""],["Gas, split by car",40,""]],
+  links:[["Canmore chalets on Airbnb","https://www.airbnb.com/s/Canmore--Alberta--Canada/homes?adults=12","filter for 6+ bedrooms and a hot tub"],["Golden chalets on Airbnb","https://www.airbnb.com/s/Golden--British-Columbia--Canada/homes?adults=12","cheaper than Canmore, an hour further"],["Private chefs in Canmore","https://www.google.com/search?q=private+chef+Canmore+group+dinner","several operators do group dinners in rentals"]],
+  pros:["Cheapest by far.","Most time together; nobody retreats to a hotel room.","No meeting room, no minimum spend, no contract."],
+  cons:["Shared bedrooms and bathrooms; some people will want a hotel.","Ryan becomes the hotel: groceries, keys, the chef, the mess."],
+  caveat:"Chalet and chef prices are ranges from listings, not quotes."},
+
+{ id:"sun", name:"Scottsdale or Las Vegas (the stretch)", region:"Further afield", regionOrder:4, travel:"3 to 3.5 h flight", mode:"fly", low:1600, high:2200,
+  tags:["Sun","Pool","Stretch"], pick:false,
+  summary:"The group would say yes fast, and January hotel rates in the desert are cheap midweek. It fails the short-flight and cheap-flight test, so it is here for the comparison, not as a recommendation.",
+  plan:[["Wednesday",["Morning flight south, pool by 2 pm.","Free afternoon by the pool. Dinner out, late."]],
+        ["Thursday",["Sessions 9 to 1 in a hotel boardroom, then the pool.","Golf or a hike for the afternoon crowd.","Big dinner out."]],
+        ["Friday",["Late checkout, afternoon flight, home by dark."]]],
+  costs:[["Flight, return",500,"$400 to $600 in January, estimate"],["Room, 2 nights",500,"midweek January, estimate"],["Meeting room and meals",250,""],["Dinner out",150,""],["Cars, tips, extras",200,""]],
+  links:[["Flights, Edmonton to Phoenix","https://www.google.com/travel/flights?q=Flights%20from%20YEG%20to%20PHX%20on%202027-01-27%20through%202027-01-29",""],["Flights, Edmonton to Las Vegas","https://www.google.com/travel/flights?q=Flights%20from%20YEG%20to%20LAS%20on%202027-01-27%20through%202027-01-29","avoid Jan 5 to 8, CES week"]],
+  pros:["Sun in January.","Cheap rooms once you are there."],
+  cons:["Double the flight cost and twice the flight time.","Border, time zone, and a longer list of things that can go wrong."],
+  caveat:"All estimates. Nobody has priced this one."},
+];
+
+// ---------- Rendering helpers ----------
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => "$" + Math.round(n).toLocaleString("en-CA");
+const mid = o => Math.round((o.low + o.high) / 2);
+let arrange = "place";
+let activeTags = new Set();
+const ALL_TAGS = ["Drive","Fly","Hot tub","Cold plunge","Wine","Spa included","Nordic spa","Cheapest"];
+function optionTags(o){ const t = new Set(o.tags); t.add(o.mode === "fly" ? "Fly" : "Drive"); return t; }
+
+function cardHTML(o){
+  const costRows = o.costs.map(([l,a,n]) => `<tr><td>${esc(l)}${n?`<br><small class="note">${esc(n)}</small>`:""}</td><td class="num">${a?money(a):"optional"}</td></tr>`).join("");
+  const total = o.costs.reduce((s,c)=>s+c[1],0);
+  return `<details class="card" id="opt-${o.id}">
+    <summary>
+      <div><div class="name">${esc(o.name)}</div><div class="place">${esc(o.region)} · ${esc(o.travel)}</div></div>
+      <div class="price"><div class="n">${money(o.low)} to ${money(o.high)}</div><div class="l">per person, all in</div></div>
+      <div class="tags">${isChosen(o.id)?'<span class="tag pick">Chosen</span>':""}${[...optionTags(o)].map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+      <p class="summary-text">${esc(o.summary)}</p>
+      <span class="open-hint">Open for the plan, costs and links</span>
+    </summary>
+    <div class="body">
+      <div><h3>The plan</h3><div class="plan-days" style="margin-top:10px">${o.plan.map(([d,items])=>`<div class="plan-day"><div class="d">${esc(d)}</div><ul>${items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul></div>`).join("")}</div></div>
+      <div class="cols">
+        <div><h3>What it costs, per person</h3><div class="tablewrap" style="margin-top:10px"><table><tbody>${costRows}<tr class="total"><td>Adds up to about</td><td class="num">${money(total)}</td></tr></tbody></table></div></div>
+        <div><h3>Links</h3><ul class="links" style="margin-top:10px">${o.links.map(([l,u,n])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a>${n?`<small>${esc(n)}</small>`:""}</li>`).join("")}</ul></div>
+      </div>
+      <div class="pm"><div><h4>For it</h4><ul>${o.pros.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div><div><h4>Against it</h4><ul>${o.cons.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div></div>
+      ${o.caveat?`<div class="caveat">${esc(o.caveat)}</div>`:""}
+      <div class="ask-row"><button class="btn ghost sm ask-card" type="button" data-opt="${esc(o.id)}">Ask Kess about this one</button><span class="note"></span></div>
+    </div>
+  </details>`;
+}
+
+function render(){
+  const openIds = new Set([...document.querySelectorAll("details.card[open]")].map(d=>d.id));
+  let list = OPTIONS.filter(o => [...activeTags].every(t => optionTags(o).has(t)));
+  const root = $("#optionsRoot");
+  if (!list.length){ root.innerHTML = `<p class="empty">Nothing matches every filter you picked. Clear one.</p>`; $("#countNote").textContent = ""; return; }
+  const chosenList = list.filter(o => isChosen(o.id));
+  const rest = chosenList.length ? list.filter(o => !isChosen(o.id)) : list;
+  function groupsHTML(items){
+    if (arrange === "price"){
+      items = [...items].sort((a,b)=>mid(a)-mid(b));
+      return `<div class="group"><div class="group-title"><h3>Cheapest first</h3><span class="travel">Sorted by the middle of each estimate</span></div><div class="cards">${items.map(cardHTML).join("")}</div></div>`;
+    }
+    const groups = new Map();
+    for (const o of items){ if(!groups.has(o.region)) groups.set(o.region, []); groups.get(o.region).push(o); }
+    const ordered = [...groups.entries()].sort((a,b)=>a[1][0].regionOrder-b[1][0].regionOrder);
+    return ordered.map(([region, its]) => {
+      its.sort((a,b)=>mid(a)-mid(b));
+      const travel = its[0].mode === "fly" ? "Short flight from Edmonton" : "Drive from Edmonton";
+      return `<div class="group"><div class="group-title"><h3>${esc(region)}</h3><span class="travel">${travel} · ${its.length} option${its.length>1?"s":""}, cheapest first</span></div><div class="cards">${its.map(cardHTML).join("")}</div></div>`;
+    }).join("");
+  }
+  if (chosenList.length){
+    root.innerHTML = `<div class="group"><div class="group-title"><h3>${chosenList.length > 1 ? "Shortlist" : "Where we're going"}</h3><span class="travel">${cfg.window ? esc(cfg.window) : "dates still to be picked"}</span></div><div class="cards">${chosenList.sort((a,b)=>mid(a)-mid(b)).map(cardHTML).join("")}</div></div>`
+      + (rest.length ? `<details class="archive"><summary>Archived options (${rest.length}), kept for the record</summary>${groupsHTML(rest)}</details>` : "");
+  } else {
+    root.innerHTML = groupsHTML(list);
+  }
+  for (const id of openIds){ const d = document.getElementById(id); if (d) d.open = true; }
+  $("#countNote").textContent = `${list.length} of ${OPTIONS.length} options shown`;
+}
+
+$("#byPlace").addEventListener("click", () => { arrange="place"; $("#byPlace").setAttribute("aria-pressed","true"); $("#byPrice").setAttribute("aria-pressed","false"); render(); });
+$("#byPrice").addEventListener("click", () => { arrange="price"; $("#byPrice").setAttribute("aria-pressed","true"); $("#byPlace").setAttribute("aria-pressed","false"); render(); });
+$("#chips").innerHTML = ALL_TAGS.map(t=>`<button class="chip" type="button" aria-pressed="false" data-tag="${esc(t)}">${esc(t)}</button>`).join("");
+$("#chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b) return;
+  const t = b.dataset.tag;
+  if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
+  b.setAttribute("aria-pressed", activeTags.has(t) ? "true" : "false");
+  render();
+});
+render();
+
+// ---------- Status, pay: everything the organizers decide shows through here ----------
+const RSVP_INTRO = $("#rsvpIntro").textContent;
+function placeName(){ const ids = cfg.chosen || []; return ids.map(id => (OPTIONS.find(o=>o.id===id)||{}).name).filter(Boolean).join(" or "); }
+function applyConfig(){
+  const where = placeName(); const when = cfg.window || "";
+  const line = cfg.confirmedText || [when, where].filter(Boolean).join(" at ");
+  if (cfg.status === "confirmed" && line){
+    $("#statusText").textContent = line;
+    $("#heroSub").textContent = "It's booked. Dates, place and the plan are below. Say you're in and pay your share and you're done.";
+  } else if (line){
+    $("#statusText").textContent = "Leaning: " + line;
+  } else { $("#statusText").textContent = "Planning. Dates and place to be picked."; }
+  $("#inviteWhen").textContent = line || "Dates and place coming soon";
+  $("#payAmount").textContent = cfg.payAmount || "Amount to come";
+  const a = $("#payLink");
+  if (cfg.payLink){ a.href = cfg.payLink; a.hidden = false; $("#payNote").textContent = "Takes you to Geneva's invoice. Rooms and flights are booked separately."; }
+  else { a.hidden = true; $("#payNote").textContent = "Geneva will send the invoice once the plan is final. The pay button appears here when the link is ready."; }
+  if (cfg.etransferEmail){
+    $("#etransfer").hidden = false; $("#etransferEmail").textContent = cfg.etransferEmail; $("#etransferNote").textContent = cfg.etransferNote || "";
+    if (!cfg.payLink) $("#payNote").textContent = "Rooms and flights are booked separately.";
+  } else { $("#etransfer").hidden = true; }
+  $("#rsvpIntro").textContent = RSVP_INTRO + (cfg.rsvpBy ? ` Please answer by ${cfg.rsvpBy}.` : "");
+  let inv = $("#invoiceLine");
+  if (!inv){ inv = document.createElement("p"); inv.id = "invoiceLine"; inv.className = "note"; $("#payNote").after(inv); }
+  const out = !!(cfg.todo && cfg.todo.invoices);
+  inv.hidden = !out; inv.textContent = out ? "Your own invoice is on your invite. The same link becomes your receipt once the office has your payment." : "";
+  let fl = $("#flightsLine");
+  if (!fl){ fl = document.createElement("p"); fl.id = "flightsLine"; fl.className = "flights-line"; $("#inviteLine").after(fl); }
+  fl.textContent = cfg.flights ? "Flights: " + cfg.flights : ""; fl.hidden = !cfg.flights;
+}
+$("#copyEtransfer").addEventListener("click", async () => { try { await navigator.clipboard.writeText(cfg.etransferEmail || ""); toast("Copied"); } catch(e){ toast("Select and copy the address"); } });
+applyConfig();
+
+// ---------- Two views: the full page, and the RSVP page the QR code opens ----------
+function setView(){
+  const h = location.hash.replace("#","");
+  const view = (h === "rsvp" || h === "pay") ? "rsvp" : "main";
+  document.body.dataset.view = view;
+  $("#fullPlanLink").hidden = view !== "rsvp";
+  if (view === "rsvp") window.scrollTo(0, 0);
+}
+setView();
+
+// ---------- RSVP ----------
+const nameSel = $("#rName");
+for (const p of PEOPLE){ const o=document.createElement("option"); o.value=p; o.textContent=p; nameSel.appendChild(o); }
+const other=document.createElement("option"); other.value="__other"; other.textContent="Someone new"; nameSel.appendChild(other);
+nameSel.addEventListener("change", () => { $("#rNameOtherWrap").hidden = nameSel.value !== "__other"; });
+try { const saved = localStorage.getItem("rsvp-name"); if (saved && PEOPLE.includes(saved)) nameSel.value = saved; } catch(e){}
+
+const LABELS = { attending:{yes:"In",maybe:"Probably",no:"Out"}, room:{own:"Own room",share:"Sharing",elsewhere:"Staying elsewhere"}, travel:{fly:"Fine to fly",drive:"Prefers to drive",either:"Either"} };
+function readForm(){
+  const f = $("#rsvpForm");
+  const name = nameSel.value === "__other" ? $("#rNameOther").value.trim() : nameSel.value;
+  const g = n => (f.querySelector(`input[name="${n}"]:checked`)||{}).value || "";
+  return { name, attending:g("attending"), room:g("room"), travel:g("travel"), diet:$("#rDiet").value.trim(), note:$("#rNote").value.trim() };
+}
+function slug(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") || "someone"; }
+function toast(msg){ const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 2600); }
+function composeText(r){
+  const lines = [`RSVP for the Mastermind Retreat 2027`, `Name: ${r.name}`, `In: ${LABELS.attending[r.attending]||"?"}`, `Room: ${LABELS.room[r.room]||"?"}`, `Travel: ${LABELS.travel[r.travel]||"?"}`];
+  if (r.diet) lines.push(`Food: ${r.diet}`); if (r.note) lines.push(`Note: ${r.note}`);
+  return lines.join("\n");
+}
+
+let db = null, canWrite = null, userNs = null;
+const answers = new Map();
+function renderWho(){
+  const list = $("#whoList"); const rows = [...answers.values()].sort((a,b)=>a.name.localeCompare(b.name));
+  const answered = rows.filter(r => r.attending);
+  if (!answered.length){ list.innerHTML = `<li class="empty">No answers yet. Yours could be first.</li>`; }
+  else list.innerHTML = answered.map(r=>`<li><span class="st ${esc(r.attending)}"></span><span>${esc(r.name)}</span><small>${esc(LABELS.attending[r.attending]||"")}${r.room?" · "+esc(LABELS.room[r.room]):""}</small></li>`).join("");
+  const yes = answered.filter(r=>r.attending==="yes").length, maybe = answered.filter(r=>r.attending==="maybe").length, no = answered.filter(r=>r.attending==="no").length;
+  $("#whoNote").textContent = answered.length ? `${yes} in, ${maybe} probably, ${no} out` : "";
+  renderTracker(rows);
+  // Ask-again list: maybes, plus anyone on the roster with no answer at all
+  const done = new Set(answered.map(r=>slug(r.name)));
+  const chase = [...answered.filter(r=>r.attending==="maybe").map(r=>({name:r.name, why:"said probably"})), ...PEOPLE.filter(p=>!done.has(slug(p)) && p !== "Ryan McDonald").map(p=>({name:p, why:"no answer yet"}))];
+  const rl = $("#remindList");
+  rl.innerHTML = chase.length ? chase.map((c,i)=>`<li><span>${esc(c.name)}</span><small class="note">${esc(c.why)}</small><button class="btn ghost sm" type="button" data-remind="${esc(c.name)}">Copy reminder</button></li>`).join("") : `<li class="empty">Nobody to chase yet.</li>`;
+}
+// Tracker: one row per person on the roster plus anyone who answered, with flip boxes for booked and paid
+function renderTracker(rows){
+  const tb = $("#trackerBody"); if (!tb) return;
+  const byId = new Map(rows.map(r => [slug(r.name), r]));
+  const names = [...new Set([...PEOPLE, ...rows.map(r=>r.name)])].sort((a,b)=>a.localeCompare(b));
+  const flip = (id, field, on) => `<button class="flip ${on?"on":""}" type="button" data-id="${esc(id)}" data-field="${field}" aria-pressed="${on?"true":"false"}" aria-label="${field}">${on?"&#10003;":""}</button>`;
+  tb.innerHTML = names.map(n => {
+    const id = slug(n); const r = byId.get(id) || { name: n };
+    const notes = [r.diet, r.note].filter(Boolean).join(" · ");
+    const inv = FIRM.invoices[id];
+    const invCell = inv ? `<a href="${esc(inv[1])}" target="_blank" rel="noopener">Invoice ${inv[0]}</a>` : `<span class="note">not in Firm yet</span>`;
+    return `<tr><td>${esc(n)}</td><td>${esc(LABELS.attending[r.attending] || "no answer")}</td><td>${esc(LABELS.room[r.room]||"")}</td><td>${esc(LABELS.travel[r.travel]||"")}</td><td class="c">${flip(id,"roomBooked",!!r.roomBooked)}</td><td class="c">${flip(id,"flightBooked",!!r.flightBooked)}</td><td class="c">${flip(id,"paid",!!r.paid)}</td><td>${invCell}</td><td>${esc(notes)}</td></tr>`;
+  }).join("");
+  const inRows = rows.filter(r=>r.attending==="yes");
+  $("#trackerNote").textContent = inRows.length ? `${inRows.filter(r=>r.roomBooked).length} of ${inRows.length} who are in have a room, ${inRows.filter(r=>r.flightBooked).length} have flights, ${inRows.filter(r=>r.paid).length} have paid.` : "";
+}
+// Still to do: the automatic items come from the decisions; the rest are boxes you tick
+const TODO_MANUAL = [["proposal","Proposal requested from the hotel"],["contract","Contract signed and deposit paid"],["block","Room block open and the group code sent out"],["firm","Fee and pay link typed into Firm"],["invoices","Invoices sent to everyone"],["bags","Welcome bags ordered"],["menu","Menu and meeting questionnaire back to the hotel"],["flights","Everyone on the same flights (if flying)"]];
+function renderTodo(){
+  const ul = $("#todoList"); if (!ul) return;
+  const auto = [
+    ["Pick the dates", !!cfg.window, "cWindow"], ["Pick the place", (cfg.chosen||[]).length > 0, "cChosen"], ["Set the RSVP deadline", !!cfg.rsvpBy, "cRsvpBy"],
+    ["Add Geneva's pay link", !!cfg.payLink, "cPayLink"], ["Set the amount per person", !!cfg.payAmount, "cPayAmount"], ["Hotel contact on file", !!cfg.hotelContact, "cHotel"],
+  ];
+  const t = cfg.todo || {};
+  ul.innerHTML = auto.map(([label, done, id]) => `<li class="auto"><span class="box ${done?"done":""}">${done?"&#10003;":""}</span><span class="${done?"done-text":""}">${esc(label)}${done?"":` <a href="#${id}" class="note">(fill it in)</a>`}</span></li>`).join("")
+    + TODO_MANUAL.map(([k, label]) => `<li><button type="button" class="box ${t[k]?"done":""}" data-todo="${k}" aria-pressed="${t[k]?"true":"false"}" aria-label="${esc(label)}">${t[k]?"&#10003;":""}</button><span class="${t[k]?"done-text":""}">${esc(label)}</span></li>`).join("");
+}
+// Decisions form <-> cfg
+const WINDOWS = ["Jan 20 to 22, 2027","Jan 27 to 29, 2027","Feb 3 to 5, 2027","Mar 17 to 19, 2027","Mar 24 to 26, 2027"];
+function fillCfgForm(){
+  if (!$("#cfgForm")) return;
+  $("#cStatus").value = cfg.status === "confirmed" ? "confirmed" : "planning";
+  const w = cfg.window || "";
+  if (!w){ $("#cWindow").value = ""; $("#cWindowOther").value = ""; }
+  else if (WINDOWS.includes(w)){ $("#cWindow").value = w; $("#cWindowOther").value = ""; }
+  else { $("#cWindow").value = "other"; $("#cWindowOther").value = w; }
+  $("#cChosen").innerHTML = OPTIONS.map(o => `<label><input type="checkbox" value="${esc(o.id)}" ${isChosen(o.id)?"checked":""}> ${esc(o.name)} <small class="note">${money(o.low)} to ${money(o.high)}</small></label>`).join("");
+  $("#cPayLink").value = cfg.payLink || ""; $("#cPayAmount").value = cfg.payAmount || ""; $("#cRsvpBy").value = cfg.rsvpBy || "";
+  $("#cEtransfer").value = cfg.etransferEmail || ""; $("#cEtransferNote").value = cfg.etransferNote || ""; $("#cFlights").value = cfg.flights || "";
+  $("#cHotel").value = cfg.hotelContact || ""; $("#cNotes").value = cfg.notes || "";
+}
+function readCfgForm(){
+  const w = $("#cWindow").value;
+  return {
+    status: $("#cStatus").value, window: w === "other" ? $("#cWindowOther").value.trim() : w,
+    chosen: [...$("#cChosen").querySelectorAll("input:checked")].map(i => i.value),
+    payLink: $("#cPayLink").value.trim(), payAmount: $("#cPayAmount").value.trim(), rsvpBy: $("#cRsvpBy").value.trim(),
+    etransferEmail: $("#cEtransfer").value.trim(), etransferNote: $("#cEtransferNote").value.trim(), flights: $("#cFlights").value.trim(),
+    hotelContact: $("#cHotel").value.trim(), notes: $("#cNotes").value.trim(), todo: cfg.todo || {},
+  };
+}
+
+$("#rsvpForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const r = readForm();
+  const sent = $("#rsvpSent");
+  if (!r.name || !r.attending){ sent.hidden=false; sent.innerHTML = `<strong>Two things first:</strong> pick your name and say whether you're in.`; return; }
+  try { localStorage.setItem("rsvp-name", r.name); } catch(err){}
+  if (db && canWrite !== false){
+    const btn = $("#rsvpSubmit"); btn.disabled = true;
+    try {
+      await db.doc("rsvps/" + slug(r.name)).set({ ...r, updatedAt: new Date().toISOString() });
+      sent.hidden=false; sent.innerHTML = `<strong>Saved.</strong> You're on the list. Come back and change it any time.`;
+      toast("RSVP saved");
+      btn.disabled = false; return;
+    } catch(err){
+      btn.disabled = false;
+      if (err && err.code === "invalid_argument"){ canWrite = false; $("#rsvpMode").textContent = "This link can't save straight to the list, so send it to Ryan instead."; }
+      else { sent.hidden=false; sent.innerHTML = `<strong>That didn't save.</strong> Try once more, or send it to Ryan with the text below.`; }
+    }
+  }
+  const text = composeText(r);
+  sent.hidden = false;
+  sent.innerHTML = `<strong>Send this to Ryan</strong><pre id="rsvpText"></pre>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" type="button" id="copyBtn">Copy it</button>
+      <a class="btn ghost" href="sms:${CONFIG.organizerPhone.replace(/[^0-9+]/g,"")}?&body=${encodeURIComponent(text)}">Text Ryan</a>
+      <a class="btn ghost" href="mailto:${CONFIG.organizerEmail}?subject=${encodeURIComponent("Retreat RSVP: "+r.name)}&body=${encodeURIComponent(text)}">Email Ryan</a>
+    </div>
+    <span class="note">Ryan's cell is ${esc(CONFIG.organizerPhone)}. If the buttons don't open anything on your phone, copy the text and send it yourself.</span>`;
+  $("#rsvpText").textContent = text;
+  $("#copyBtn").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(text); toast("Copied"); }
+    catch(err){ const range=document.createRange(); range.selectNodeContents($("#rsvpText")); const s=window.getSelection(); s.removeAllRanges(); s.addRange(range); toast("Select and copy"); }
+  });
+});
+
+// ---------- Public site: answers and questions go to Ryan by text or email ----------
+$("#rsvpMode").textContent = "Your answer goes to Ryan by text or email.";
+function askBox(host, topic){
+  const old = host.querySelector(".ask-box"); if (old){ old.remove(); return; }
+  const box = document.createElement("div"); box.className = "ask-box";
+  const lead = topic ? `Ask Kess about ${topic}: ` : "Ask Kess: ";
+  box.innerHTML = `<textarea rows="3" placeholder="Price it, change it, add it. Anything."></textarea>
+    <div class="ask-actions"><a class="btn sm" href="#">Text it</a><a class="btn ghost sm" href="#">Email it</a><span class="note">Goes to Ryan. Kess answers on this page.</span></div>`;
+  const ta = box.querySelector("textarea"), [sms, mail] = box.querySelectorAll("a");
+  const upd = () => {
+    const t = lead + ta.value.trim();
+    sms.href = "sms:" + CONFIG.organizerPhone.replace(/[^0-9+]/g,"") + "?&body=" + encodeURIComponent(t);
+    mail.href = "mailto:" + CONFIG.organizerEmail + "?subject=" + encodeURIComponent("Ask Kess, retreat") + "&body=" + encodeURIComponent(t);
+  };
+  ta.addEventListener("input", upd); upd();
+  host.appendChild(box); ta.focus();
+}
+$("#askBtn").addEventListener("click", () => askBox($("#askPanel"), ""));
+$("#optionsRoot").addEventListener("click", e => {
+  const b = e.target.closest(".ask-card"); if (!b) return;
+  const card = b.closest("details.card"); const o = OPTIONS.find(x => x.id === b.dataset.opt);
+  askBox(card.querySelector(".ask-row").parentElement, o ? o.name : "");
+});
+
+// ---------- First-visit walkthrough ----------
+const TOUR = [
+  { sel: "nav.top", title: "Jump around", text: "Options, dates, the plan, RSVP and pay are all one page. These links take you there." },
+  { sel: "#options .controls", title: "Arrange the options", text: "Group them by place, or sort cheapest first. The chips narrow it to what you care about: fly, hot tub, wine, cold plunge." },
+  { sel: "#optionsRoot details.card", title: "One card, one way to do it", text: "Every card is a complete trip. Open it for the day-by-day plan, what it costs per person, and links to the hotels and tours.", open: true },
+  { sel: "#optionsRoot details.card .ask-row", title: "Ask about this one", text: "Each card has its own Ask Kess button. A question asked here is pinned to this option, so the answer comes back about the right place." },
+  { sel: "#dates", title: "Dates that work", text: "Five windows that work, with real flight prices for each." },
+  { sel: "#plan .skeleton", title: "The shape of the three days", text: "Arrive and play, one working morning, then nothing. This is the same whichever place we pick." },
+  { sel: "#rsvpForm", title: "RSVP", text: "This is where everyone says they are in. The invites carry a QR code that opens a short version of this page with just this form." },
+  { sel: "#pay", title: "Pay your share", text: "The amount and the pay button appear here once the place is booked." },
+  { sel: "#askPanel", title: "Anything else", text: "Want something changed, priced or added? Ask Kess here." },
+];
+const tourEls = { overlay: null, spot: null, tip: null, step: 0, active: false };
+function tourSeen(){ try { return localStorage.getItem("tour-seen") === "1"; } catch(e){ return true; } }
+function markTourSeen(){ try { localStorage.setItem("tour-seen", "1"); } catch(e){} }
+function startTour(){
+  if (document.body.dataset.view !== "main" || tourEls.active) return;
+  tourEls.active = true; tourEls.step = 0;
+  const spot = document.createElement("div"); spot.className = "tour-spot";
+  const tip = document.createElement("div"); tip.className = "tour-tip"; tip.setAttribute("role","dialog"); tip.setAttribute("aria-label","Walkthrough");
+  document.body.append(spot, tip); tourEls.spot = spot; tourEls.tip = tip;
+  tip.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.act === "next") showStep(tourEls.step + 1);
+    else if (b.dataset.act === "back") showStep(tourEls.step - 1);
+    else endTour();
+  });
+  window.addEventListener("resize", placeTour); window.addEventListener("scroll", placeTour, { passive: true });
+  document.addEventListener("keydown", tourKeys);
+  showStep(0);
+}
+function tourKeys(e){ if (e.key === "Escape") endTour(); if (e.key === "ArrowRight") showStep(tourEls.step + 1); if (e.key === "ArrowLeft") showStep(tourEls.step - 1); }
+function endTour(){
+  if (!tourEls.active) return;
+  tourEls.active = false; markTourSeen();
+  tourEls.spot.remove(); tourEls.tip.remove();
+  window.removeEventListener("resize", placeTour); window.removeEventListener("scroll", placeTour); document.removeEventListener("keydown", tourKeys);
+  if (location.hash === "#tour") history.replaceState(null, "", location.pathname);
+}
+function showStep(i){
+  if (i < 0) return;
+  if (i >= TOUR.length){ endTour(); return; }
+  tourEls.step = i;
+  const s = TOUR[i];
+  const target = document.querySelector(s.sel);
+  if (!target){ showStep(i + 1); return; }
+  if (s.open){ const d = target.closest("details") || target; if (d.tagName === "DETAILS") d.open = true; }
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  target.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+  tourEls.tip.innerHTML = `<div class="tour-n">${i + 1} of ${TOUR.length}</div><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p>
+    <div class="tour-btns"><button type="button" class="btn ghost sm" data-act="skip">${i === TOUR.length - 1 ? "Close" : "Skip"}</button><span style="flex:1"></span>${i > 0 ? '<button type="button" class="btn ghost sm" data-act="back">Back</button>' : ""}<button type="button" class="btn sm" data-act="next">${i === TOUR.length - 1 ? "Done" : "Next"}</button></div>`;
+  setTimeout(placeTour, reduce ? 50 : 420);
+}
+function placeTour(){
+  if (!tourEls.active) return;
+  const target = document.querySelector(TOUR[tourEls.step].sel); if (!target) return;
+  const r = target.getBoundingClientRect(); const pad = 8;
+  Object.assign(tourEls.spot.style, { top: (r.top - pad) + "px", left: (r.left - pad) + "px", width: (r.width + pad * 2) + "px", height: (r.height + pad * 2) + "px" });
+  const tip = tourEls.tip; const tw = Math.min(360, window.innerWidth - 32);
+  tip.style.width = tw + "px";
+  const th = tip.offsetHeight || 160;
+  let top = r.bottom + pad + 12;
+  if (top + th > window.innerHeight - 16) top = Math.max(16, r.top - pad - 12 - th);
+  if (top + th > window.innerHeight - 16) top = Math.max(16, window.innerHeight - th - 16);
+  let left = Math.min(Math.max(16, r.left), window.innerWidth - tw - 16);
+  Object.assign(tip.style, { top: top + "px", left: left + "px" });
+}
+$("#tourLink").addEventListener("click", e => { e.preventDefault(); startTour(); });
+if (location.hash === "#tour") setTimeout(startTour, 400);
+else if (!tourSeen() && document.body.dataset.view === "main") setTimeout(startTour, 900);
+
+// ---------- Hash: #rsvp from the QR code switches to the RSVP page; other hashes scroll ----------
+function goHash(){ setView(); const h = location.hash.replace("#",""); if (!h || h === "rsvp" || h === "tour") return; const el = document.getElementById(h); if (el) el.scrollIntoView({ block: "start" }); }
+window.addEventListener("hashchange", goHash);
+setTimeout(goHash, 50);
+</script>
